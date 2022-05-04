@@ -18,7 +18,6 @@
   "homepage": "https://github.com/GusFors/InstantFader#readme",
   "dependencies": {
     "gm": "^1.23.1",
-    "imagemagick": "^0.1.3",
     "merge-images": "^2.0.0"
   }
 }

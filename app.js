@@ -1,4 +1,3 @@
-const im = require('imagemagick')
 const fs = require('fs')
 const gm = require('gm')
 
@@ -11,9 +10,10 @@ const gm = require('gm')
     fs.mkdirSync('./temp_files')
   }
 
+  createBlankHitCircles()
+
   let filesToBeUpScaled = ['hitcircle@2x.png', 'hitcircleoverlay@2x.png']
   upScale(filesToBeUpScaled, createInstas)
-  
 })()
 
 function upScale(filePaths, cb) {
@@ -25,8 +25,10 @@ function upScale(filePaths, cb) {
       gm(filePaths[i])
         .resize(sizeData.width * 1.25, sizeData.height * 1.25, '!')
         .write('./temp_files/' + filePaths[i], (err) => {
+          if (err) console.log(err)
+
+          // call cb after last upscale
           if (i + 1 === filePaths.length) {
-            // call cb after last upscale
             cb()
           }
         })
@@ -35,15 +37,28 @@ function upScale(filePaths, cb) {
 }
 
 function createInstas() {
-  for (let i = 0; i <= 10; i++) {
+  for (let i = 0; i < 10; i++) {
     gm('./temp_files/' + 'hitcircle@2x.png')
       .composite(`default-${i}@2x.png`)
       .gravity('Center')
       //.composite('hitcircleoverlay@2x.pngresize.png')
       .write(`./temp_files/default-${i}-test.png`, (err) => {
+        if (err) console.log(err)
+
         gm(`./temp_files/default-${i}-test.png`)
           .composite('./temp_files/' + 'hitcircleoverlay@2x.png')
-          .write(`./new_files/default-${i}@2x.png`, (err) => {})
+          .write(`./new_files/default-${i}@2x.png`, (err) => {
+            if (err) console.log(err)
+          })
       })
   }
+}
+
+function createBlankHitCircles() {
+  gm(1, 1, '#00000000').write('./new_files/hitcircleoverlay@2x.png', (err) => {
+    if (err) console.log(err)
+  })
+  gm(1, 1, '#00000000').write('./new_files/hitcircle@2x.png', (err) => {
+    if (err) console.log(err)
+  })
 }
