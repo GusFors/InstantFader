@@ -3,20 +3,17 @@ const fs = require('fs')
 const gm = require('gm')
 
 ;(async () => {
-  //   let hitCircleInfo = new Promise((resolve, reject) => {
-  //     gm('hitcircle@2x.png').identify((err, data) => {
-  //       resolve(data.size)
-  //     })
-  //   })
+  if (!fs.existsSync('./new_files')) {
+    fs.mkdirSync('./new_files')
+  }
+
+  if (!fs.existsSync('./temp_files')) {
+    fs.mkdirSync('./temp_files')
+  }
+
   let filesToBeUpScaled = ['hitcircle@2x.png', 'hitcircleoverlay@2x.png']
-
   upScale(filesToBeUpScaled, createInstas)
-  // upScale('hitcircleoverlay@2x.png')
-  // gm('default-1@2x.png').write('default-1@2x.pngresize.png', (err) => {})
-
-  // upscale  hitcircle and hitcircleoverlay by 1.25
-  //   console.log(hitCircleInfo.width)
-  //   gm('hitcircle@2x.png').resize(await hitCircleInfo.width, await hitCircleInfo.height)
+  
 })()
 
 function upScale(filePaths, cb) {
@@ -48,9 +45,5 @@ function createInstas() {
           .composite('./temp_files/' + 'hitcircleoverlay@2x.png')
           .write(`./new_files/default-${i}@2x.png`, (err) => {})
       })
-    // .append('hitcircleoverlay@2x.pngresize.png', true)
   }
 }
-// gm('hitcircle@2x.png').identify(function (err, data) {
-//   if (!err) console.log(data)
-// })
